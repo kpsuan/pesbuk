@@ -1,0 +1,18 @@
+<h1>All Users</h1>
+
+<% @users.each do |user| %>
+  <div class="user">
+    <%= link_to(user.username.presence || user.email, user_path(user)) %>
+
+    <% if current_user.following.exists?(id: user.id) %>
+      <p>Already following</p>
+
+    <% elsif (request = current_user.sent_follow_requests.find_by(receiver: user)) %>
+      <p>Follow request pending</p>
+      <%= button_to "Cancel Request", follow_request_path(request), method: :delete %>
+
+    <% else %>
+      <%= button_to "Follow", user_follow_requests_path(user), method: :post %>
+    <% end %>
+  </div>
+<% end %>

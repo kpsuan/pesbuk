@@ -1,0 +1,10 @@
+<h1>Follow Requests</h1>
+
+<% @follow_requests.each do |request| %>
+  <div>
+    <p><%= request.sender.username.presence || request.sender.email %> wants to follow you</p>
+
+    <%= button_to "Accept", accept_follow_request_path(request), method: :patch %>
+    <%= button_to "Decline", decline_follow_request_path(request), method: :patch %>
+  </div>
+<% end %>

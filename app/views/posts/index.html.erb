@@ -1,0 +1,38 @@
+<h1>Feed</h1>
+
+<%= link_to "New Post", new_post_path, class: "btn btn-primary" %>
+
+<% @posts.each do |post| %>
+  <div class="post">
+    <p><strong><%= link_to post.user.email, user_path(post.user) %></strong></p>
+
+    <p><%= post.content %></p>
+
+    <% if post.images.attached? %>
+      <div class="post-images">
+        <% post.images.each do |img| %>
+          <%= image_tag img.variant(resize_to_limit: [500, 500]), alt: "Post Image" %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <p>
+      Likes: <%= post.likes.count %>
+      <% like = post.likes.find_by(user: current_user) %>
+      <% if like %>
+        <%= button_to "Unlike", post_like_path(post, like), method: :delete %>
+      <% else %>
+        <%= button_to "Like", post_likes_path(post), method: :post %>
+      <% end %>
+    </p>
+
+    <p>
+      <%= link_to "Comments (#{post.comments.count})", post_path(post) %>
+    </p>
+
+    <!-- View Post Button -->
+    <p>
+      <%= link_to "View Post", post_path(post), class: "btn btn-secondary" %>
+    </p>
+  </div>
+<% end %>

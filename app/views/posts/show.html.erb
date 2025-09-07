@@ -1,0 +1,37 @@
+<h1>Post by <%= link_to @post.user.username || @post.user.email, user_path(@post.user) %></h1>
+<p><%= @post.content %></p>
+
+<% if @post.images.attached? %>
+  <div class="post-images">
+    <% @post.images.each do |img| %>
+      <%= image_tag img.variant(resize_to_limit: [600, 600]) %>
+    <% end %>
+  </div>
+<% end %>
+
+<p>
+  Likes: <%= @post.likes.count %>
+  <% if like = @post.likes.find_by(user: current_user) %>
+    <%= button_to "Unlike", post_like_path(@post, like), method: :delete %>
+  <% else %>
+    <%= button_to "Like", post_likes_path(@post), method: :post %>
+  <% end %>
+</p>
+
+
+<h2>Comments</h2>
+<% @post.comments.each do |comment| %>
+  <p>
+    <strong><%= comment.user.username || comment.user.email %>:</strong>
+    <%= comment.content %>
+    <% if comment.user == current_user %>
+      <%= button_to "Delete", post_comment_path(@post, comment), method: :delete %>
+    <% end %>
+  </p>
+<% end %>
+
+<h3>Add a comment</h3>
+<%= form_with model: [@post, @comment], local: true do |f| %>
+  <%= f.text_area :content %>
+  <%= f.submit "Post Comment" %>
+<% end %>

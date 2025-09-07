@@ -1,0 +1,37 @@
+<h1><%= @user.username.presence || @user.email %></h1>
+<p><strong>Bio:</strong> <%= @user.bio %></p>
+<% if @user.avatar.attached? %>
+  <%= image_tag @user.avatar, class: "profile-photo" %>
+<% else %>
+  <p>No profile photo yet</p>
+<% end %>
+
+<% if current_user == @user %>
+  <%= link_to "Edit Profile", edit_user_registration_path, class: "btn btn-primary" %>
+<% end %>
+
+<hr>
+
+<h2>Followers (<%= @user.followers.count %>)</h2>
+<ul>
+  <% @user.followers.each do |follower| %>
+    <li><%= link_to(follower.username.presence || follower.email, user_path(follower)) %></li>
+  <% end %>
+</ul>
+
+<h2>Following (<%= @user.following.count %>)</h2>
+<ul>
+  <% @user.following.each do |followed| %>
+    <li><%= link_to(followed.username.presence || followed.email, user_path(followed)) %></li>
+  <% end %>
+</ul>
+
+<hr>
+
+<h2>Posts</h2>
+<% @posts.each do |post| %>
+  <div class="post">
+    <p><%= post.content %></p>
+    <p><%= link_to "View Post", post_path(post) %></p>
+  </div>
+<% end %>

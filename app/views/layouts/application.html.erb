@@ -23,6 +23,8 @@
   </head>
 
   <body>
+    <%= render "layouts/nav" if user_signed_in? %>
     <%= yield %>
-  </body>
+</body>
+
 </html>
